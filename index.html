@@ -11,14 +11,16 @@
       background: linear-gradient(135deg, #ffe4ec, #dff2ff);
       font-family: 'Arial', sans-serif;
       overflow-x: hidden;
+      overflow-y: auto;
     }
     .container {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
       position: relative;
+      padding: 20px;
     }
     .envelope {
       width: 300px;
@@ -59,6 +61,8 @@
       display: none;
       margin-top: 30px;
       animation: fadeIn 1s ease forwards;
+      position: relative;
+      z-index: 1;
     }
     .letter-content h1 {
       color: #4a4a4a;
@@ -93,17 +97,28 @@
       0% {opacity: 0; transform: translateY(20px);}
       100% {opacity: 1; transform: translateY(0);}
     }
-    iframe {
-      display: none;
+
+    /* Falling shapes (stars & flowers) */
+    .shape {
+      position: fixed;
+      top: -50px;
+      font-size: 18px;
+      opacity: 0.8;
+      pointer-events: none;
+      animation: fall-shape linear forwards;
+    }
+    @keyframes fall-shape {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
     }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="envelope" id="envelope" onclick="openEnvelope()">
-    <!-- flap is styled -->
-  </div>
+  <div class="envelope" id="envelope" onclick="openEnvelope()"></div>
 
   <div class="controls">
     <button id="toggleMusicButton" onclick="toggleMusic()">Play Music 🎵</button>
@@ -113,45 +128,35 @@
     <h1>Dear Bunly,</h1>
     <div>
       I don’t know if you ever get to read this but I genuinely hope you do since I put quite a lot of effort into this.  
-      I don’t think you even remember my existence since it’s been some time since we broke up. 
-      I know we’re out of time and I know there’s a slim chance of us turning the table. Yet, somehow I still couldn’t give myself the closure I needed.
-      I just want to check up on you a little bit because it seems like you aren’t doing well. 
-      Actually I’ve been checking your reposts and I noticed you’ve been down these few days. I hope you’re doing okay. 
-      Don’t ever let negativity get you in however state and problem you’re in.
-      Anyway, I hope your teeth and head are doing better now. Whether you respond or not, please remember that you’re loved and appreciated. 
-      Always know that there’s always someone out there rooting for you.
+      I don’t think you even remember my existence since it’s been some time since we broke up. I know we’re out of time and I know there’s a slim chance of us turning the table. Yet, somehow I still couldn’t give myself the closure I needed.  
+      
+      I just want to check up on you a little bit because it seems like you aren’t doing well. Actually I’ve been checking your reposts and I noticed you’ve been down these few days. I hope you’re doing okay. Don’t ever let negativity get you in however state and problem you’re in.
 
-      Fighting and take care, Dear!
+      Anyway, I hope your teeth and head are doing better now. Whether you respond or not, please remember that you’re loved and appreciated. Always know that there’s always someone out there rooting for you.
+
+      Fighting and take care, Bunly!
     </div>
     <div class="closing">
       With love,<br/>
-          Sey
+      Someone whom you have forgotten
     </div>
   </div>
 
-  <iframe 
-    id="musicPlayer" 
-    width="100%" 
-    height="166" 
-    scrolling="no" 
-    frameborder="no" 
-    allow="autoplay"
-    src=""
-  ></iframe>
+  <!-- Using your MP3 from Google Drive -->
+  <audio id="audioPlayer" preload="auto">
+    <source src="https://drive.google.com/uc?export=download&id=1lvW2RAfgDP0x_Ai9b_99Ce_m4ykyoUUF" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
 </div>
 
 <script>
   const envelope = document.getElementById('envelope');
   const letter = document.getElementById('letter');
-  const musicPlayer = document.getElementById('musicPlayer');
   const toggleMusicButton = document.getElementById('toggleMusicButton');
+  const audioPlayer = document.getElementById('audioPlayer');
 
   let isOpened = false;
   let isMusicPlaying = false;
-
-  // Use the gxldentaev track you sent
-  const soundcloudTrackURL = "https://on.soundcloud.com/rTYO80Fxxr5EffcUDH";
-  const soundcloudEmbedURL = "https://w.soundcloud.com/player/?url=" + encodeURIComponent(soundcloudTrackURL) + "&color=%23fdd835&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false";
 
   function openEnvelope() {
     if (!isOpened) {
@@ -165,17 +170,41 @@
 
   function toggleMusic() {
     if (!isMusicPlaying) {
-      musicPlayer.src = soundcloudEmbedURL;
+      audioPlayer.play().catch((err) => {
+        console.error("Audio play error:", err);
+        alert("Audio can’t play. Maybe permissions or browser blocked it.");
+      });
       toggleMusicButton.classList.add("playing");
       toggleMusicButton.textContent = "Pause Music ⏸️";
       isMusicPlaying = true;
     } else {
-      musicPlayer.src = "";
+      audioPlayer.pause();
       toggleMusicButton.classList.remove("playing");
       toggleMusicButton.textContent = "Play Music 🎵";
       isMusicPlaying = false;
     }
   }
+
+  // floating shapes (stars & flowers)
+  const shapes = ["✦","❀","✿","✧","★","🌸","🌼"];
+  const colors = ["#f8bbd0","#a3b4c4","#f5b6c3","#b0d8e9","#ffe4ac"];
+
+  function createShape() {
+    const shape = document.createElement("div");
+    shape.className = "shape";
+    shape.innerHTML = shapes[Math.floor(Math.random()*shapes.length)];
+    shape.style.left = Math.random()*100 + "vw";
+    shape.style.color = colors[Math.floor(Math.random()*colors.length)];
+    shape.style.fontSize = 14 + Math.random()*20 + "px";
+    shape.style.animationDuration = 4 + Math.random()*4 + "s";
+    document.body.appendChild(shape);
+    setTimeout(() => {
+      shape.remove();
+    }, 8000);
+  }
+
+  setInterval(createShape, 700);
+
 </script>
 
 </body>
