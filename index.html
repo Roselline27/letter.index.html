@@ -6,163 +6,64 @@
   <title>Confession Letter</title>
   <style>
     body {
-      background: #f5eee6; /* lighter, warm background */
-      min-height: 100vh;
-      margin: 0;
-      overflow: hidden;
-      font-family: Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      transition: background 0.5s;
-    }
-
-    /* Envelope styles */
-    .envelope-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      z-index: 1;
-    }
-    .envelope {
-      width: 340px;
-      height: 210px;
-      position: relative;
-      transition: box-shadow 0.3s;
-      margin-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-    }
-    .envelope .flap {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
       background: #e6d6c3;
-      clip-path: polygon(0 0, 100% 0, 50% 60%, 0 0);
-      z-index: 3;
-      transition: transform 0.6s cubic-bezier(.86,0,.07,1), opacity 0.6s;
-      transform-origin: top center;
-    }
-    .envelope.opened .flap {
-      transform: rotateX(-100deg);
-      opacity: 0;
-    }
-    .envelope .body {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: #fffbe9;
-      border: 2px solid #bfa78b;
-      border-radius: 0 0 18px 18px;
-      z-index: 2;
-    }
-    .envelope .shadow {
-      position: absolute;
-      width: 90%; height: 18px;
-      left: 5%; bottom: -10px;
-      background: rgba(191, 167, 139, 0.14);
-      border-radius: 30px;
-      z-index: 1;
-      filter: blur(3px);
-    }
-    .envelope .envelope-to {
-      position: relative;
-      z-index: 4;
-      text-align: center;
-      width: 100%;
-      margin-bottom: 28px;
-      font-size: 1.3rem;
-      color: #7b6d61;
-      font-family: 'Caveat', cursive, Arial, sans-serif;
-      letter-spacing: 1px;
-      pointer-events: none;
-      user-select: none;
-      white-space: pre-line;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      overflow: auto;
+      padding: 20px;
     }
 
-    /* Letter styles (hidden at first) */
     .letter {
-      display: none;
-      background: rgba(255, 255, 255, 0.97);
-      padding: 38px 32px;
-      max-width: 420px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 40px;
+      max-width: 700px;
       line-height: 1.8;
-      font-size: 1.16rem;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.07);
+      font-size: 1.3rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       border: 2px solid #bfa78b;
       border-radius: 16px;
       white-space: pre-wrap;
-      transition: transform 0.18s;
-      position: relative;
-      z-index: 4;
-      margin: 0 auto;
-      margin-top: -160px;
+      transition: transform 0.15s ease-in-out;
+      max-height: 80vh;
+      overflow-y: auto;
     }
-    .letter.visible {
-      display: block;
-      animation: fadeInUp 0.8s;
-    }
-    @keyframes fadeInUp {
-      0% { opacity: 0; transform: translateY(40px);}
-      100% { opacity: 1; transform: translateY(0);}
-    }
+
     .letter h1 {
       text-align: center;
       margin-bottom: 20px;
       color: #7b6d61;
-      font-size: 1.4rem;
-      font-family: 'Caveat', cursive, Arial, sans-serif;
-      letter-spacing: 1px;
+      font-size: 2rem;
     }
+
     .closing {
-      margin-top: 32px;
+      margin-top: 40px;
       text-align: right;
       color: #7b6d61;
-      font-size: 1.1rem;
+      font-size: 1.5rem;
     }
+
     [contenteditable="true"] {
       outline: none;
     }
-    /* Cute button */
-    .open-btn {
-      margin-top: 24px;
-      padding: 12px 40px;
-      font-size: 1.2rem;
-      background: linear-gradient(90deg,#f7cac0 20%,#b4e4d3 80%);
-      color: #7b6d61;
-      border: none;
-      border-radius: 100px;
-      box-shadow: 0 2px 10px #bfa78b33;
-      cursor: pointer;
-      font-family: inherit;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      position: relative;
-      transition: background 0.22s, transform 0.13s;
-      z-index: 5;
-    }
-    .open-btn:hover {
-      background: linear-gradient(90deg,#b4e4d3 20%,#f7cac0 80%);
-      color: #5b4c41;
-      transform: translateY(-2px) scale(1.04);
-    }
-    .open-btn .emoji {
-      margin-right: 0.5em;
-      font-size: 1.1em;
-      animation: floatHeart 1.6s infinite alternate;
-    }
-    @keyframes floatHeart {
-      0% { transform: translateY(0);}
-      100% { transform: translateY(-5px);}
-    }
-    .controls { display: none; }
 
-    /* Floating shapes */
+    .controls {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    button {
+      background: #7b6d61;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
     .shape {
       position: fixed;
       top: -20px;
@@ -171,127 +72,100 @@
       opacity: 0.7;
       pointer-events: none;
     }
+
     @keyframes fall {
       to {
         transform: translateY(110vh) rotate(360deg);
         opacity: 0;
       }
     }
-    @media (max-width: 600px) {
-      .envelope, .letter { max-width: 98vw; }
-      .envelope .envelope-to { font-size: 1.1rem; }
+
+    @media print {
+      body { background: white; }
+      .controls { display: none; }
+      .letter { border: none; box-shadow: none; transform: none; }
     }
   </style>
-  <!-- Optional: prettier handwriting font for "Dear Bunly," line -->
-  <link href="https://fonts.googleapis.com/css?family=Caveat:700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="envelope-container">
-    <div class="envelope" id="envelope">
-      <div class="flap"></div>
-      <div class="body"></div>
-      <div class="shadow"></div>
-      <div class="envelope-to" id="envelopeTo">Dear Bunly,</div>
-    </div>
-    <button class="open-btn" id="openBtn"><span class="emoji">💌</span>Open Letter</button>
+  <div>
     <div class="letter" id="letter">
-      <h1 contenteditable="true" id="letterTo">Dear Bunly,</h1>
+      <h1 contenteditable="true">Dear love,</h1>
       <div contenteditable="true">
- I don’t know if you ever get to read this but I genuinely hope you do since I put quite a lot of effort into this html link. 
- Uhm, I don’t think you even remember my existence since it’s been some time since we broke up. I know we’re out of time and i know there’s a slim chance of us turning the table. Yet, somehow i still couldn’t give myself the closure i needed. Well, i’m not expecting anything so….please don’t get me wrong. I’m not here to seek your validation and sympathy. I just want to check up on you a little bit because it seems like you aren’t doing well.
- Actually I’ve been checking your reposts and i noticed you’ve been down these few days. I don’t know what happened though but i hope you’re doing okay. Yes i’m aware this isn’t much, however it’s disturbing me seeing you like this. Don’t ever let negativity get you in however state and problem you’re in.
- Anyway, I hope your teeth and head are doing better now and regardless of whether you respond back or not, please remember that you’re loved and appreciated. Always know that there’s always someone out there rooting for you.
+I don’t know if you ever get to read this but I genuinely hope you do since I put quite a lot of effort into this html link. 
+Uhm, I don’t think you even remember my existence since it’s been some time since we broke up. I know we’re out of time and i know there’s a slim chance of us turning the table. Yet, somehow i still couldn’t give myself the closure i needed. Well, i’m not expecting anything so….please don’t get me wrong. I’m not here to seek your validation and sympathy. I just want to check up on you a little bit because it seems like you aren’t doing well.
+Actually I’ve been checking your reposts and i noticed you’ve been down these few days. I don’t know what happened though but i hope you’re doing okay. Yes i’m aware this isn’t much, however it’s disturbing me seeing you like this. Don’t ever let negativity get you in however state and problem you’re in.
+Anyway, I hope your teeth and head are doing better now and regardless of whether you respond back or not, please remember that you’re loved and appreciated. Always know that there’s always someone out there rooting for you.
 Fighting and take care, Bunly! 
       </div>
       <div class="closing" contenteditable="true">
-    With love,<br>
-        Sey 
+      Sincerely,<br>
+      Someone whom you have forgotten 
       </div>
     </div>
+
+    <div class="controls">
+      <button id="toggleMusicButton" onclick="toggleMusic()">Play Music</button>
+    </div>
+
+    <!-- Hidden SoundCloud iframe -->
+    <iframe
+      id="musicPlayer"
+      width="0"
+      height="0"
+      frameborder="no"
+      scrolling="no"
+      allow="autoplay"
+      src=""
+    ></iframe>
   </div>
 
-  <!-- 🎵 YouTube Autoplay Music -->
-  <iframe id="music-iframe" width="0" height="0"
-    src="https://www.youtube.com/embed/CnVVjLOGVoY?autoplay=1&loop=1&playlist=CnVVjLOGVoY&enablejsapi=1"
-    frameborder="0"
-    allow="autoplay"
-    allowfullscreen
-    style="display:none"></iframe>
-
   <script>
-    // Sync recipient name between envelope and letter (optional: keep in sync if you edit)
-    const envelopeTo = document.getElementById('envelopeTo');
-    const letterTo = document.getElementById('letterTo');
-    letterTo.addEventListener('input', function() {
-      envelopeTo.textContent = letterTo.textContent;
-    });
-
-    // Envelope open logic
-    const openBtn = document.getElementById("openBtn");
-    const envelope = document.getElementById("envelope");
     const letter = document.getElementById("letter");
-    openBtn.addEventListener("click", () => {
-      envelope.classList.add("opened");
-      setTimeout(() => {
-        letter.classList.add("visible");
-        openBtn.style.display = "none";
-      }, 750);
-    });
+    const musicPlayer = document.getElementById("musicPlayer");
+    const toggleMusicButton = document.getElementById("toggleMusicButton");
 
-    // Floating soft shapes
+    // Animate letter gently
+    function animate(){
+      requestAnimationFrame(animate);
+      let time = Date.now()/1000;
+      let scale = 1 + 0.01 * Math.sin(time*2);
+      letter.style.transform = `scale(${scale})`;
+    }
+    animate();
+
+    // Floating shapes
     const colors = ["#a3b4c4", "#bfa78b", "#f5b6c3", "#b0d8e9"];
-    const shapes = ["✦","❀","✿","✧"];
+    const shapes = ["✦", "❀", "✿", "✧"];
+
     setInterval(() => {
       const shape = document.createElement("div");
       shape.className = "shape";
-      shape.innerHTML = shapes[Math.floor(Math.random()*shapes.length)];
-      shape.style.left = Math.random()*100 + "vw";
-      shape.style.color = colors[Math.floor(Math.random()*colors.length)];
-      shape.style.animationDuration = 4 + Math.random()*3 + "s";
+      shape.innerHTML = shapes[Math.floor(Math.random() * shapes.length)];
+      shape.style.left = Math.random() * 100 + "vw";
+      shape.style.color = colors[Math.floor(Math.random() * colors.length)];
+      shape.style.animationDuration = 4 + Math.random() * 3 + "s";
       document.body.appendChild(shape);
-      setTimeout(()=>shape.remove(), 8000);
+      setTimeout(() => shape.remove(), 8000);
     }, 900);
 
-    // YouTube player control for Play/Pause (optional)
-    let isPlaying = true;
-    openBtn.insertAdjacentHTML('afterend', `
-      <button id="musicToggle" class="open-btn" style="margin-top:10px;font-size:1em;padding:8px 24px;"><span class="emoji">🎵</span>Pause Music</button>
-    `);
-    const musicBtn = document.getElementById('musicToggle');
-    const iframe = document.getElementById("music-iframe");
+    // Music toggle
+    let isMusicPlaying = false;
+    const musicURL = "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1321067364&color=%23ff5500&auto_play=true&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false";
 
-    function postToPlayer(cmd) {
-      iframe.contentWindow.postMessage(JSON.stringify({
-        'event': 'command',
-        'func': cmd,
-        'args': []
-      }), '*');
-    }
-    musicBtn.addEventListener('click', function() {
-      if (isPlaying) {
-        postToPlayer('pauseVideo');
-        musicBtn.innerHTML = '<span class="emoji">🎵</span>Play Music';
+    const musicURLPaused = musicURL.replace("auto_play=true", "auto_play=false");
+
+    function toggleMusic() {
+      if (!isMusicPlaying) {
+        musicPlayer.src = musicURL;
+        toggleMusicButton.textContent = "Pause Music";
+        isMusicPlaying = true;
       } else {
-        postToPlayer('playVideo');
-        musicBtn.innerHTML = '<span class="emoji">🎵</span>Pause Music';
+        musicPlayer.src = musicURLPaused;
+        toggleMusicButton.textContent = "Play Music";
+        isMusicPlaying = false;
       }
-      isPlaying = !isPlaying;
-    });
-
-    // Auto-hide music button until open
-    musicBtn.style.display = "none";
-    openBtn.addEventListener("click", () => {
-      setTimeout(() => {
-        musicBtn.style.display = "inline-block";
-      }, 900);
-    });
-
-    // YouTube player API handshake
-    function onYouTubeIframeAPIReady() {
-      postToPlayer('playVideo');
     }
-    setTimeout(() => { postToPlayer('playVideo'); }, 1500);
-
   </script>
 </body>
 </html>
