@@ -98,11 +98,11 @@
       100% {opacity: 1; transform: translateY(0);}
     }
 
-    /* Falling shapes (stars & flowers) */
+    /* Floating shapes */
     .shape {
       position: fixed;
       top: -50px;
-      font-size: 18px;
+      font-size: 22px;
       opacity: 0.8;
       pointer-events: none;
       animation: fall-shape linear forwards;
@@ -112,6 +112,10 @@
         transform: translateY(110vh) rotate(360deg);
         opacity: 0;
       }
+    }
+
+    iframe {
+      display: none;
     }
   </style>
 </head>
@@ -142,18 +146,23 @@
     </div>
   </div>
 
-  <!-- Using your MP3 from Google Drive -->
-  <audio id="audioPlayer" preload="auto">
-    <source src="https://drive.google.com/uc?export=download&id=1lvW2RAfgDP0x_Ai9b_99Ce_m4ykyoUUF" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
+  <!-- YouTube embed -->
+  <iframe
+    id="musicYTPlayer"
+    width="0"
+    height="0"
+    src="https://www.youtube.com/embed/aMffjXYCpKU?autoplay=1&loop=1&playlist=aMffjXYCpKU"
+    frameborder="0"
+    allow="autoplay; encrypted-media"
+    allowfullscreen
+  ></iframe>
 </div>
 
 <script>
   const envelope = document.getElementById('envelope');
   const letter = document.getElementById('letter');
   const toggleMusicButton = document.getElementById('toggleMusicButton');
-  const audioPlayer = document.getElementById('audioPlayer');
+  const musicYTPlayer = document.getElementById('musicYTPlayer');
 
   let isOpened = false;
   let isMusicPlaying = false;
@@ -170,41 +179,33 @@
 
   function toggleMusic() {
     if (!isMusicPlaying) {
-      audioPlayer.play().catch((err) => {
-        console.error("Audio play error:", err);
-        alert("Audio can’t play. Maybe permissions or browser blocked it.");
-      });
-      toggleMusicButton.classList.add("playing");
+      musicYTPlayer.style.display = 'block';
       toggleMusicButton.textContent = "Pause Music ⏸️";
+      toggleMusicButton.classList.add("playing");
       isMusicPlaying = true;
     } else {
-      audioPlayer.pause();
-      toggleMusicButton.classList.remove("playing");
+      musicYTPlayer.src = "";
       toggleMusicButton.textContent = "Play Music 🎵";
+      toggleMusicButton.classList.remove("playing");
       isMusicPlaying = false;
     }
   }
 
-  // floating shapes (stars & flowers)
-  const shapes = ["✦","❀","✿","✧","★","🌸","🌼"];
-  const colors = ["#f8bbd0","#a3b4c4","#f5b6c3","#b0d8e9","#ffe4ac"];
+  // Floating shapes (flowers/stars)
+  const shapes = ["✧", "❀", "✿", "💫", "✨", "🌸"];
+  const colors = ["#f48fb1", "#ce93d8", "#b39ddb", "#ffcc80", "#80deea", "#fff176"];
 
-  function createShape() {
+  setInterval(() => {
     const shape = document.createElement("div");
     shape.className = "shape";
-    shape.innerHTML = shapes[Math.floor(Math.random()*shapes.length)];
-    shape.style.left = Math.random()*100 + "vw";
-    shape.style.color = colors[Math.floor(Math.random()*colors.length)];
-    shape.style.fontSize = 14 + Math.random()*20 + "px";
-    shape.style.animationDuration = 4 + Math.random()*4 + "s";
+    shape.innerHTML = shapes[Math.floor(Math.random() * shapes.length)];
+    shape.style.left = Math.random() * 100 + "vw";
+    shape.style.color = colors[Math.floor(Math.random() * colors.length)];
+    shape.style.fontSize = 18 + Math.random() * 10 + "px";
+    shape.style.animationDuration = 4 + Math.random() * 3 + "s";
     document.body.appendChild(shape);
-    setTimeout(() => {
-      shape.remove();
-    }, 8000);
-  }
-
-  setInterval(createShape, 700);
-
+    setTimeout(() => shape.remove(), 8000);
+  }, 700);
 </script>
 
 </body>
