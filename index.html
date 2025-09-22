@@ -84,7 +84,7 @@
       text-align: center;
     }
 
-    button {
+    #toggleMusicButton {
       padding: 10px 20px;
       font-size: 1rem;
       background: #90caf9;
@@ -92,12 +92,21 @@
       border-radius: 6px;
       color: #fff;
       cursor: pointer;
-      margin-top: 20px;
+      transition: background 0.3s;
+    }
+
+    #toggleMusicButton.playing {
+      background: #fdd835;
+      color: #333;
     }
 
     @keyframes fadeIn {
       0% {opacity: 0; transform: translateY(20px);}
       100% {opacity: 1; transform: translateY(0);}
+    }
+
+    iframe {
+      display: none;
     }
   </style>
 </head>
@@ -108,37 +117,49 @@
     <!-- flap is styled with :before -->
   </div>
 
+  <div class="controls">
+    <button id="toggleMusicButton" onclick="toggleMusic()">Play Music 🎵</button>
+  </div>
+
   <div class="letter-content" id="letter">
     <h1>Dear Bunly,</h1>
     <div>
-       I don’t know if you ever get to read this but I genuinely hope you do since I put quite a lot of effort into this.  
-      I don’t think you even remember my existence since it’s been some time since we broke up. 
-      I know we’re out of time and I know there’s a slim chance of us turning the table.
-      Yet, somehow I still couldn’t give myself the closure I needed. 
-      I just want to check up on you a little bit because it seems like you aren’t doing well.
-      Actually I’ve been checking your reposts and I noticed you’ve been down these few days. I hope you’re doing okay. 
-      Don’t ever let negativity get you in however state and problem you’re in.
-      Anyway, I hope your teeth and head are doing better now. Whether you respond or not, please remember that you’re loved and appreciated. 
-      Know that there’s always someone out there rooting for you.
-      Fighting and take care, dear!
+      I don’t know if you ever get to read this but I genuinely hope you do since I put quite a lot of effort into this.  
+      I don’t think you even remember my existence since it’s been some time since we broke up. I know we’re out of time and I know there’s a slim chance of us turning the table. Yet, somehow I still couldn’t give myself the closure I needed. 
+      
+      I just want to check up on you a little bit because it seems like you aren’t doing well. Actually I’ve been checking your reposts and I noticed you’ve been down these few days. I hope you’re doing okay. Don’t ever let negativity get you in however state and problem you’re in.
+
+      Anyway, I hope your teeth and head are doing better now. Whether you respond or not, please remember that you’re loved and appreciated. Always know that there’s always someone out there rooting for you.
+
+      Fighting and take care, Bunly!
     </div>
     <div class="closing">
       With love,<br/>
-          Sey
+      Someone whom you have forgotten
     </div>
   </div>
 
-  <!-- Hidden SoundCloud -->
-  <iframe id="musicPlayer" width="0" height="0" frameborder="no" allow="autoplay" allowfullscreen
-    src=""></iframe>
+  <!-- Hidden SoundCloud iframe -->
+  <iframe 
+    id="musicPlayer" 
+    width="100%" 
+    height="166" 
+    scrolling="no" 
+    frameborder="no" 
+    allow="autoplay"
+    src=""
+  ></iframe>
 </div>
 
 <script>
   const envelope = document.getElementById('envelope');
   const letter = document.getElementById('letter');
   const musicPlayer = document.getElementById('musicPlayer');
+  const toggleMusicButton = document.getElementById('toggleMusicButton');
 
   let isOpened = false;
+  let isMusicPlaying = false;
+
   const soundcloudURL = "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1321067364&color=%23fdd835&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false";
 
   function openEnvelope() {
@@ -146,9 +167,31 @@
       envelope.classList.add('open');
       setTimeout(() => {
         letter.style.display = 'block';
-      }, 500); // after flap opens
-      musicPlayer.src = soundcloudURL;
+      }, 500);
+      playMusic();
       isOpened = true;
+    }
+  }
+
+  function playMusic() {
+    musicPlayer.src = soundcloudURL;
+    toggleMusicButton.classList.add("playing");
+    toggleMusicButton.textContent = "Pause Music ⏸️";
+    isMusicPlaying = true;
+  }
+
+  function stopMusic() {
+    musicPlayer.src = ""; // Stops playback by resetting src
+    toggleMusicButton.classList.remove("playing");
+    toggleMusicButton.textContent = "Play Music 🎵";
+    isMusicPlaying = false;
+  }
+
+  function toggleMusic() {
+    if (isMusicPlaying) {
+      stopMusic();
+    } else {
+      playMusic();
     }
   }
 </script>
