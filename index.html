@@ -1,52 +1,82 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Confession Letter</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>💌 Confession Envelope</title>
   <style>
     body {
-      background: #e6d6c3;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ffe4ec, #dff2ff);
+      font-family: 'Arial', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .container {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin: 0;
-      font-family: Arial, sans-serif;
-      overflow: auto;
-      padding: 20px;
+      height: 100vh;
+      position: relative;
     }
 
-    .letter {
-      background: rgba(255, 255, 255, 0.9);
-      padding: 40px;
-      max-width: 700px;
+    .envelope {
+      width: 300px;
+      height: 200px;
+      background: #ffcdd2;
+      position: relative;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: transform 0.4s ease-in-out;
+    }
+
+    .envelope:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 150px solid transparent;
+      border-right: 150px solid transparent;
+      border-bottom: 100px solid #f8bbd0;
+      transition: transform 0.4s ease-in-out;
+      transform-origin: top center;
+      z-index: 2;
+    }
+
+    .envelope.open:before {
+      transform: rotateX(180deg);
+    }
+
+    .letter-content {
+      max-width: 600px;
+      background: #fff8e1;
+      border: 2px solid #fdd835;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
       line-height: 1.8;
-      font-size: 1.3rem;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      border: 2px solid #bfa78b;
-      border-radius: 16px;
-      white-space: pre-wrap;
-      transition: transform 0.15s ease-in-out;
-      max-height: 80vh;
-      overflow-y: auto;
+      font-size: 1.1rem;
+      display: none;
+      margin-top: 30px;
+      animation: fadeIn 1s ease forwards;
     }
 
-    .letter h1 {
+    .letter-content h1 {
+      color: #4a4a4a;
       text-align: center;
       margin-bottom: 20px;
-      color: #7b6d61;
-      font-size: 2rem;
     }
 
-    .closing {
-      margin-top: 40px;
+    .letter-content .closing {
+      margin-top: 30px;
       text-align: right;
-      color: #7b6d61;
-      font-size: 1.5rem;
-    }
-
-    [contenteditable="true"] {
-      outline: none;
+      color: #666;
+      font-weight: bold;
     }
 
     .controls {
@@ -55,117 +85,73 @@
     }
 
     button {
-      background: #7b6d61;
-      color: white;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 6px;
+      padding: 10px 20px;
       font-size: 1rem;
+      background: #90caf9;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
       cursor: pointer;
+      margin-top: 20px;
     }
 
-    .shape {
-      position: fixed;
-      top: -20px;
-      font-size: 18px;
-      animation: fall linear forwards;
-      opacity: 0.7;
-      pointer-events: none;
-    }
-
-    @keyframes fall {
-      to {
-        transform: translateY(110vh) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
-    @media print {
-      body { background: white; }
-      .controls { display: none; }
-      .letter { border: none; box-shadow: none; transform: none; }
+    @keyframes fadeIn {
+      0% {opacity: 0; transform: translateY(20px);}
+      100% {opacity: 1; transform: translateY(0);}
     }
   </style>
 </head>
 <body>
-  <div>
-    <div class="letter" id="letter">
-      <h1 contenteditable="true">Dear love,</h1>
-      <div contenteditable="true">
-I don’t know if you ever get to read this but I genuinely hope you do since I put quite a lot of effort into this html link. 
-Uhm, I don’t think you even remember my existence since it’s been some time since we broke up. I know we’re out of time and i know there’s a slim chance of us turning the table. Yet, somehow i still couldn’t give myself the closure i needed. Well, i’m not expecting anything so….please don’t get me wrong. I’m not here to seek your validation and sympathy. I just want to check up on you a little bit because it seems like you aren’t doing well.
-Actually I’ve been checking your reposts and i noticed you’ve been down these few days. I don’t know what happened though but i hope you’re doing okay. Yes i’m aware this isn’t much, however it’s disturbing me seeing you like this. Don’t ever let negativity get you in however state and problem you’re in.
-Anyway, I hope your teeth and head are doing better now and regardless of whether you respond back or not, please remember that you’re loved and appreciated. Always know that there’s always someone out there rooting for you.
-Fighting and take care, Bunly! 
-      </div>
-      <div class="closing" contenteditable="true">
-      Sincerely,<br>
-      Someone whom you have forgotten 
-      </div>
-    </div>
 
-    <div class="controls">
-      <button id="toggleMusicButton" onclick="toggleMusic()">Play Music</button>
-    </div>
-
-    <!-- Hidden SoundCloud iframe -->
-    <iframe
-      id="musicPlayer"
-      width="0"
-      height="0"
-      frameborder="no"
-      scrolling="no"
-      allow="autoplay"
-      src=""
-    ></iframe>
+<div class="container">
+  <div class="envelope" id="envelope" onclick="openEnvelope()">
+    <!-- flap is styled with :before -->
   </div>
 
-  <script>
-    const letter = document.getElementById("letter");
-    const musicPlayer = document.getElementById("musicPlayer");
-    const toggleMusicButton = document.getElementById("toggleMusicButton");
+  <div class="letter-content" id="letter">
+    <h1>Dear Bunly,</h1>
+    <div>
+       I don’t know if you ever get to read this but I genuinely hope you do since I put quite a lot of effort into this.  
+      I don’t think you even remember my existence since it’s been some time since we broke up. 
+      I know we’re out of time and I know there’s a slim chance of us turning the table.
+      Yet, somehow I still couldn’t give myself the closure I needed. 
+      I just want to check up on you a little bit because it seems like you aren’t doing well.
+      Actually I’ve been checking your reposts and I noticed you’ve been down these few days. I hope you’re doing okay. 
+      Don’t ever let negativity get you in however state and problem you’re in.
+      Anyway, I hope your teeth and head are doing better now. Whether you respond or not, please remember that you’re loved and appreciated. 
+      Know that there’s always someone out there rooting for you.
+      Fighting and take care, dear!
+    </div>
+    <div class="closing">
+      With love,<br/>
+          Sey
+    </div>
+  </div>
 
-    // Animate letter gently
-    function animate(){
-      requestAnimationFrame(animate);
-      let time = Date.now()/1000;
-      let scale = 1 + 0.01 * Math.sin(time*2);
-      letter.style.transform = `scale(${scale})`;
+  <!-- Hidden SoundCloud -->
+  <iframe id="musicPlayer" width="0" height="0" frameborder="no" allow="autoplay" allowfullscreen
+    src=""></iframe>
+</div>
+
+<script>
+  const envelope = document.getElementById('envelope');
+  const letter = document.getElementById('letter');
+  const musicPlayer = document.getElementById('musicPlayer');
+
+  let isOpened = false;
+  const soundcloudURL = "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1321067364&color=%23fdd835&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false";
+
+  function openEnvelope() {
+    if (!isOpened) {
+      envelope.classList.add('open');
+      setTimeout(() => {
+        letter.style.display = 'block';
+      }, 500); // after flap opens
+      musicPlayer.src = soundcloudURL;
+      isOpened = true;
     }
-    animate();
+  }
+</script>
 
-    // Floating shapes
-    const colors = ["#a3b4c4", "#bfa78b", "#f5b6c3", "#b0d8e9"];
-    const shapes = ["✦", "❀", "✿", "✧"];
-
-    setInterval(() => {
-      const shape = document.createElement("div");
-      shape.className = "shape";
-      shape.innerHTML = shapes[Math.floor(Math.random() * shapes.length)];
-      shape.style.left = Math.random() * 100 + "vw";
-      shape.style.color = colors[Math.floor(Math.random() * colors.length)];
-      shape.style.animationDuration = 4 + Math.random() * 3 + "s";
-      document.body.appendChild(shape);
-      setTimeout(() => shape.remove(), 8000);
-    }, 900);
-
-    // Music toggle
-    let isMusicPlaying = false;
-    const musicURL = "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1321067364&color=%23ff5500&auto_play=true&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false";
-
-    const musicURLPaused = musicURL.replace("auto_play=true", "auto_play=false");
-
-    function toggleMusic() {
-      if (!isMusicPlaying) {
-        musicPlayer.src = musicURL;
-        toggleMusicButton.textContent = "Pause Music";
-        isMusicPlaying = true;
-      } else {
-        musicPlayer.src = musicURLPaused;
-        toggleMusicButton.textContent = "Play Music";
-        isMusicPlaying = false;
-      }
-    }
-  </script>
 </body>
 </html>
