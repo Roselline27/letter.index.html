@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>💌 Confession Envelope</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #ffe4ec, #dff2ff);
+    font-family: 'Arial', sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    position: relative;
+    padding: 20px;
+  }
+  .envelope {
+    width: 300px;
+    height: 200px;
+    background: #ffcdd2;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.4s ease-in-out;
+  }
+  .envelope:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-bottom: 100px solid #f8bbd0;
+    transition: transform 0.4s ease-in-out;
+    transform-origin: top center;
+    z-index: 2;
+  }
+  .envelope.open:before {
+    transform: rotateX(180deg);
+  }
+  .letter-content {
+    max-width: 600px;
+    background: #fff8e1;
+    border: 2px solid #fdd835;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    line-height: 1.8;
+    font-size: 1.1rem;
+    display: none;
+    margin-top: 30px;
+    animation: fadeIn 1s ease forwards;
+    position: relative;
+    z-index: 1;
+  }
+  .letter-content h1 {
+    color: #4a4a4a;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .letter-content .closing {
+    margin-top: 30px;
+    text-align: right;
+    color: #666;
+    font-weight: bold;
+    margin-left: 20px;
+  }
+  .controls {
+    margin-top: 20px;
+    text-align: center;
+  }
+  #toggleMusicButton {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background: #90caf9;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  #toggleMusicButton.playing {
+    background: #fdd835;
+    color: #333;
+  }
+  @keyframes fadeIn {
+    0% {opacity: 0; transform: translateY(20px);}
+    100% {opacity: 1; transform: translateY(0);}
+  }
+
+  /* Falling shapes (stars & flowers) */
+  .shape {
+    position: fixed;
+    top: -50px;
+    font-size: 18px;
+    opacity: 0.8;
+    pointer-events: none;
+    animation: fall-shape linear forwards;
+  }
+  @keyframes fall-shape {
+    to {
+      transform: translateY(110vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="envelope" id="envelope" onclick="openEnvelope()"></div>
+
+  <div class="controls">
+    <button id="toggleMusicButton" onclick="toggleMusic()">Play Music 🎵</button>
+  </div>
+
+  <div class="letter-content" id="letter">
+    <h1>Dear Bunly,</h1>
+    <div>
+      I don’t know if you ever get to read this but I genuinely hope you do since I put quite a lot of effort into this.  
+      I don’t think you even remember my existence since it’s been some time since we broke up. I know we’re out of time and I know there’s a slim chance of us turning the table. Yet, somehow I still couldn’t give myself the closure I needed.  
+
+      I just want to check up on you a little bit because it seems like you aren’t doing well. Actually I’ve been checking your reposts and I noticed you’ve been down these few days. I hope you’re doing okay. Don’t ever let negativity get you in however state and problem you’re in.
+
+      Anyway, I hope your teeth and head are doing better now. Fighting and take care, dear!
+    </div>
+    <div class="closing">
+      With love,<br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;Sey
+    </div>
+  </div>
+
+  <!-- YouTube Music -->
+  <div id="youtubePlayer" style="display:none;"></div>
+</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+  const envelope = document.getElementById('envelope');
+  const letter = document.getElementById('letter');
+  const toggleMusicButton = document.getElementById('toggleMusicButton');
+  let player;
+  let isOpened = false;
+  let isMusicPlaying = false;
+
+  function openEnvelope() {
+    if (!isOpened) {
+      envelope.classList.add('open');
+      setTimeout(() => {
+        letter.style.display = 'block';
+      }, 500);
+      isOpened = true;
+    }
+  }
+
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('youtubePlayer', {
+      height: '0',
+      width: '0',
+      videoId: 'aMffjXYCpKU', // YouTube Shorts ID
+      playerVars: { autoplay: 0, loop: 1, playlist: 'aMffjXYCpKU' }
+    });
+  }
+
+  function toggleMusic() {
+    if (!player) return;
+    if (!isMusicPlaying) {
+      player.playVideo();
+      toggleMusicButton.classList.add("playing");
+      toggleMusicButton.textContent = "Pause Music ⏸️";
+      isMusicPlaying = true;
+    } else {
+      player.pauseVideo();
+      toggleMusicButton.classList.remove("playing");
+      toggleMusicButton.textContent = "Play Music 🎵";
+      isMusicPlaying = false;
+    }
+  }
+
+  // floating shapes
+  const shapes = ["✦","❀","✿","✧","★","🌸","🌼"];
+  const colors = ["#f8bbd0","#a3b4c4","#f5b6c3","#b0d8e9","#ffe4ac"];
+  function createShape() {
+    const shape = document.createElement("div");
+    shape.className = "shape";
+    shape.innerHTML = shapes[Math.floor(Math.random()*shapes.length)];
+    shape.style.left = Math.random()*100 + "vw";
+    shape.style.color = colors[Math.floor(Math.random()*colors.length)];
+    shape.style.fontSize = 14 + Math.random()*20 + "px";
+    shape.style.animationDuration = 4 + Math.random()*4 + "s";
+    document.body.appendChild(shape);
+    setTimeout(() => { shape.remove(); }, 8000);
+  }
+  setInterval(createShape, 700);
+</script>
+
+</body>
+</html>
